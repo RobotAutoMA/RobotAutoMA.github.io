@@ -111,18 +111,18 @@
                   Intelligence</span></a>
             </div>
 
-            <div class="column has-text-centered">
-              <div class="publication-links">
-                <!-- PDF Link. -->
-                <span class="link-block">
+            <!-- <div class="column has-text-centered">
+              <div class="publication-links"> -->
+            <!-- PDF Link. -->
+            <!-- <span class="link-block">
                   <a href="./static/videos/Diff-Control.pdf" class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <i class="fas fa-file-pdf"></i>
                     </span>
                     <span>Paper</span>
                   </a>
-                </span>
-                <!-- <span class="link-block">
+                </span> -->
+            <!-- <span class="link-block">
                   <a href="https://arxiv.org/abs/2011.12948" class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <i class="ai ai-arxiv"></i>
@@ -130,17 +130,17 @@
                     <span>arXiv</span>
                   </a>
                 </span> -->
-                <!-- Video Link. -->
-                <span class="link-block">
+            <!-- Video Link. -->
+            <!-- <span class="link-block">
                   <a href="./static/videos/task_sequence.mp4" class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <i class="fab fa-youtube"></i>
                     </span>
                     <span>Video</span>
                   </a>
-                </span>
-                <!-- Code Link. -->
-                <span class="link-block">
+                </span> -->
+            <!-- Code Link. -->
+            <!-- <span class="link-block">
                   <a href="https://github.com/ir-lab/Diff-Control"
                     class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
@@ -148,9 +148,9 @@
                     </span>
                     <span>Code</span>
                   </a>
-                </span>
-                <!-- Dataset Link. -->
-                <span class="link-block">
+                </span> -->
+            <!-- Dataset Link. -->
+            <!-- <span class="link-block">
                   <a href="https://www.dropbox.com/scl/fo/2onj92s7gewettu1rjg3d/h?rlkey=1d4dnhwf3z6s4a51lopgocby5&dl=0"
                     class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
@@ -158,9 +158,9 @@
                     </span>
                     <span>Data</span>
                   </a>
-              </div>
+              </div> -->
 
-            </div>
+            <!-- </div> -->
           </div>
         </div>
       </div>
@@ -305,6 +305,142 @@
   <section class="section">
     <div class="container is-max-desktop">
 
+
+
+
+
+      <!-- method. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">AutoMA</h2>
+
+          <!-- Interpolating. -->
+          <h3 class="title is-4">Overview</h3>
+          <div class="content has-text-justified">
+            <p>
+              This AutoMA framework bridges the gap between modular and end-to-end learning, enabling the reuse of
+              functional building blocks. In summary, our contributions are as follows: (1) <strong>Leveraging Rich
+                Context</strong>: Our approach leverages rich context by decomposing tasks into hierarchical modules and
+              semantically extracting the underlying context for each module; (2) <strong>Improving Data
+                Efficiency</strong>:
+              AutoMA enhances data efficiency by enabling the reuse of functional building blocks when transferring
+              tasks to different embodiments; (3) <strong>Empirical Evaluations</strong>: AutoMA demonstrates
+              significant
+              improvements, achieving up to 56% success rate improvements in complex manipulation tasks with
+              distractors compared to baselines.
+            </p>
+            <img src="./static/videos/overview_automa.png" class="interpolation-image"
+              alt="Interpolate start reference image." />
+            <p>
+              LLMs decompose high-level tasks, such as "<i>stack the red block on the brown block</i>" into modules
+              and construct a hierarchy among them. <strong>AutoMA</strong> integrates this hierarchy using slot
+              attention mechanisms for
+              policy learning. For instance, the <i>Task</i> and <i>Object</i> only focus on <i>Lang</i> tokens in
+              the first attention layer, the <i>ObjLoc</i> module attends to <i>Image</i> to localizing objects, and
+              the <i>CTRL</i> module attends to <i>EE</i>, <i>task</i>, and <i>ObjLoc</i> to generate final
+              robot actions.
+            </p>
+          </div>
+
+
+          <!-- Attention Gain -->
+          <h3 class="title is-4">Modularity</h3>
+          <div class="content has-text-justified">
+            <p>
+              For instance, in a stacking task, the high-level task is decomposed into several
+              sub-tasks: (1) understanding the required action type, (2) identifying which object to manipulate, (3)
+              locating the object in the image, and (4) generating the end-effector controls. As shown in the figure,
+              these sub-tasks form a hierarchical structure
+            </p>
+            <center><img src="./static/videos/h.png" width="400" height="300"></center>
+            <p>
+              where <i>Lang</i>, <i>Image</i>, and <i>EE</i> are considered as input modules, <i>Task</i>,
+              <i>Object</i>, <i>ObjLoc</i>, and <i>CTRL</i> are sub-task modules.
+            </p>
+          </div>
+          <!--/ Attention Gain -->
+
+
+          <!-- result -->
+          <h3 class="title is-4">Tasks</h3>
+          <div class="content has-text-justified">
+            <p>
+              we evaluate the effectiveness of AutoMA across multiple manipulation tasks, each with distinct setups:
+            <ul>
+              <li><strong>Stacking</strong>: task (a)-(c) for block stacking tasks </li>
+              <li><strong>Sorting</strong>: task (d)-(e) for object sorting tasks with and without distractors
+              <li><strong>TableTop</strong>: task (f) for manipulation in real-world with distractors
+              </li>
+            </ul>
+
+            </p>
+            <img src="./static/videos/automa_task.png" class="interpolation-image"
+              alt="Interpolate start reference image." />
+          </div>
+          <!--/ result -->
+
+          <!-- result -->
+          <h3 class="title is-4">Evaluations</h3>
+          <div class="content has-text-justified">
+            <p>
+            <ul>
+              <li><strong>Image-BC</strong>: This baseline adopts an image-to-action agent
+                framework, similar to BC-Z, it is built upon ResNet-18 backbone and employs FiLM for conditioning
+                using
+                CLIP language features. </li>
+              <li><strong>Diffusion Policy</strong>: This baseline is a standard diffusion-based policy, We adopt the 1D
+                temporal convolutional networks and construct the U-net backbone.
+              </li>
+              <li><strong>ModAttn</strong>: This baseline is a transformer based network, which shares the same
+                architecture with our proposed AutoMA, but trained end-to-end without enforcing rich contexts.
+              </li>
+            </ul>
+
+            </p>
+            <center><img src="./static/videos/Table_automa.png" width="600" height="400" class="interpolation-image"
+                alt="Interpolate start reference image." /></center>
+          </div>
+          <!--/ result -->
+
+        </div>
+      </div>
+
+
+
+
+
+      <!-- Concurrent Work. -->
+      <!-- <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Related Links</h2>
+
+          <div class="content has-text-justified">
+            <p>
+              To assess the performance and effectiveness of our approach, we conducted comparative evaluations
+              against
+              robot learning policy baselines.
+            </p>
+            <p>
+              <a href="https://diffusion-policy.cs.columbia.edu/">Diffusion Policy
+              </a> serves as the base policy in proposed framework, similar design decisions has been made referring
+              to
+              the visual encodings, hyper-parameters, etc.
+            </p>
+            <p>
+              We adapt <a href="https://github.com/lllyasviel/ControlNet">ControlNet</a> sturcture, expecially the
+              zero
+              convolusion layers to create Diff-Control in robot trajectory domain.
+            </p>
+            <p>
+              Besides diffusion policy, we compared <a href="https://arxiv.org/abs/2202.02005">Image-BC/BC-Z</a>
+              baseline, the <a href="https://arxiv.org/pdf/2212.04573.pdf">ModAttn</a> baseline, and BC-Z LSTM.
+            </p>
+          </div>
+        </div>
+      </div> -->
+      <!--/ Concurrent Work. -->
+
+
       <!--/ video for 3 start-->
       <div class="columns is-centered has-text-centered">
 
@@ -355,7 +491,7 @@
           <div class="content">
             <h2 class="title is-5">Sort Object</h2>
             <p>
-              Testing trial 01 with distractors
+              "Put the bread in the bin"
             </p>
             <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
               <source src="./static/videos/video_10.mp4" type="video/mp4">
@@ -367,7 +503,7 @@
           <div class="content">
             <h2 class="title is-5">Sort Object</h2>
             <p>
-              Testing trial 02 with distractors
+              "Sort the coke can"
             </p>
             <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
               <source src="./static/videos/video_11.mp4" type="video/mp4">
@@ -379,7 +515,7 @@
           <div class="content">
             <h2 class="title is-5">Sort Object</h2>
             <p>
-              Testing trial 03 with distractors
+              "Pick the milk and put it in the bin"
             </p>
             <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
               <source src="./static/videos/video_12.mp4" type="video/mp4">
@@ -397,7 +533,7 @@
           <div class="content">
             <h2 class="title is-5">Stack Blocks</h2>
             <p>
-              Testing trial 01 with no distractor
+              "Stack the red block on the green block"
             </p>
             <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
               <source src="./static/videos/video_20.mp4" type="video/mp4">
@@ -409,7 +545,7 @@
           <div class="content">
             <h2 class="title is-5">Stack Blocks</h2>
             <p>
-              Testing trial 02 with no distractor
+              "Put the red block on the green block"
             </p>
             <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
               <source src="./static/videos/video_21.mp4" type="video/mp4">
@@ -421,7 +557,7 @@
           <div class="content">
             <h2 class="title is-5">Stack Blocks</h2>
             <p>
-              Testing trial 03 with no distractor
+              "Place red block over green block"
             </p>
             <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
               <source src="./static/videos/video_22.mp4" type="video/mp4">
@@ -439,7 +575,7 @@
           <div class="content">
             <h2 class="title is-5">Stack Blocks</h2>
             <p>
-              Testing trial 01 with distractors
+              "Put the red block on the green block"
             </p>
             <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
               <source src="./static/videos/video_30.mp4" type="video/mp4">
@@ -451,7 +587,7 @@
           <div class="content">
             <h2 class="title is-5">Stack Blocks</h2>
             <p>
-              Testing trial 02 with no distractor
+              "Stack blue blcok on the green block"
             </p>
             <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
               <source src="./static/videos/video_31.mp4" type="video/mp4">
@@ -463,7 +599,7 @@
           <div class="content">
             <h2 class="title is-5">Stack Blocks</h2>
             <p>
-              Testing trial 03 with no distractor
+              "Place the brown block on the red block"
             </p>
             <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
               <source src="./static/videos/video_32.mp4" type="video/mp4">
@@ -474,174 +610,55 @@
       </div>
       <!--/ video for 3 end-->
 
-
-
-      <!-- method. -->
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-full-width">
-          <h2 class="title is-3">AutoMA</h2>
-
-          <!-- Interpolating. -->
-          <h3 class="title is-4">Overview</h3>
-          <div class="content has-text-justified">
-            <p>
-              This AutoMA framework bridges the gap between modular and end-to-end learning, enabling the reuse of
-              functional building blocks. In summary, our contributions are as follows: (1) <strong>Leveraging Rich
-                Context</strong>: Our approach leverages rich context by decomposing tasks into hierarchical modules and
-              semantically extracting the underlying context for each module; (2) <strong>Improving Data
-                Efficiency</strong>:
-              AutoMA enhances data efficiency by enabling the reuse of functional building blocks when transferring
-              tasks to different embodiments; (3) <strong>Empirical Evaluations</strong>: AutoMA demonstrates
-              significant
-              improvements, achieving up to 56% success rate improvements in complex manipulation tasks with
-              distractors compared to baselines.
-            </p>
-            <img src="./static/videos/overview_automa.png" class="interpolation-image"
-              alt="Interpolate start reference image." />
-            <p>
-              Diff-Control operates by generating a sequence of actions while incorporating conditioning on previously
-              generated actions. In this example, the Diff-Control policy is depicted executing the "Open Lid" task.
-              For
-              instance, in the second sub-figure,
-              the blue trajectory represents previous action trajectory, denoted as
-              <strong>a<sub>[W<sub>t</sub>]</sub></strong>, while
-              the red trajectory
-              displays the newly generated sequence of actions, denoted as
-              <strong>a<sub>[W<sub>t-h</sub>]</sub></strong>.
-            </p>
-          </div>
-
-
-          <!-- Attention Gain -->
-          <h3 class="title is-4">Stateful behavior</h3>
-          <div class="content has-text-justified">
-            <p>
-              We find that proposed Diff-Control policy effectively maintains stateful behavior by conditioning its
-              actions on prior actions, resulting in consistent action generation. An illustrative example for this
-              behavior is shown below: a policy learning to approximate a cosine function. Given single observation at
-              time t, stateless policies encounter difficulties in producing accurate generating the continuation of
-              trajectories. Due to ambiguities, diffusion policy tends to learn multiple modes. By contrast,
-              Diff-Control integrates temporal conditioning allowing it to generate trajectories by considering past
-              states. To this end, the proposed approach leverages recent ControlNet architectures to ensure temporal
-              consistency in robot action generation.
-            </p>
-            <center><img src="./static/videos/sine.png" width="600" height="500"></center>
-            <p>
-              At a given state, Diff-Control policy can utilize prior trajectories to approximate the desired
-              function.
-              Diffusion policy learns both modes but fails on generating the correct trajectory cosistently,
-              Image-BC/BC-Z fails to generate the correct trajectory.
-            </p>
-          </div>
-          <!--/ Attention Gain -->
-
-
-          <!-- result -->
-          <h3 class="title is-4">Tasks</h3>
-          <div class="content has-text-justified">
-            <p>
-            <ul>
-              <li><strong>Language Conditioned kitchen tasks</strong>: This task is designed to resemble several tasks
-                in the kitchen scenario. </li>
-              <li><strong>Open Lid task</strong>: this task is in the kitchen scene with a high-precision requirement.
-              </li>
-              <li><strong>Duck Scooping task</strong>: we explore the interaction between the policy and fluid
-                dynamics.
-              </li>
-              <li><strong>Drum Beats (3 hits) task</strong>: this task is specifically designed for robots to learn
-                periodic
-                motions</li>
-            </ul>
-
-            </p>
-            <img src="./static/videos/task.png" class="interpolation-image" alt="Interpolate start reference image." />
-          </div>
-          <!--/ result -->
-
-          <!-- result -->
-          <h3 class="title is-4">Evaluations</h3>
-          <div class="content has-text-justified">
-            <p>
-            <ul>
-              <li><strong>Image-BC</strong>: This baseline adopts an image-to-action agent
-                framework, similar to BC-Z, it is built upon ResNet-18 backbone and employs FiLM for conditioning
-                using
-                CLIP language features. </li>
-              <li><strong>ModAttn</strong>: This method employs a transformer-style neural network and uses a modular
-                structure to address each sub-aspects of the task via neural attention, it requires a human expert
-                correctly identifies components and subtasks to each task.
-              </li>
-              <li><strong>BC-Z LSTM</strong>: This baseline represents a stateful policy inspired by the BC-Z
-                architecture. The incorporation of a prior input is achieved by fusing the prior actions and language
-                conditions using MLP and LSTM layers.
-              </li>
-              <li><strong>Diffusion Policy</strong>: This baseline is a standard diffusion policy.</li>
-            </ul>
-
-            </p>
-            <center><img src="./static/videos/Table.png" width="800" height="600" class="interpolation-image"
-                alt="Interpolate start reference image." /></center>
-          </div>
-          <!--/ result -->
-
-        </div>
-      </div>
-
-
-
-
-
-      <!-- Concurrent Work. -->
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-full-width">
-          <h2 class="title is-3">Related Links</h2>
-
-          <div class="content has-text-justified">
-            <p>
-              To assess the performance and effectiveness of our approach, we conducted comparative evaluations
-              against
-              robot learning policy baselines.
-            </p>
-            <p>
-              <a href="https://diffusion-policy.cs.columbia.edu/">Diffusion Policy
-              </a> serves as the base policy in proposed framework, similar design decisions has been made referring
-              to
-              the visual encodings, hyper-parameters, etc.
-            </p>
-            <p>
-              We adapt <a href="https://github.com/lllyasviel/ControlNet">ControlNet</a> sturcture, expecially the
-              zero
-              convolusion layers to create Diff-Control in robot trajectory domain.
-            </p>
-            <p>
-              Besides diffusion policy, we compared <a href="https://arxiv.org/abs/2202.02005">Image-BC/BC-Z</a>
-              baseline, the <a href="https://arxiv.org/pdf/2212.04573.pdf">ModAttn</a> baseline, and BC-Z LSTM.
-            </p>
-          </div>
-        </div>
-      </div>
-      <!--/ Concurrent Work. -->
-
     </div>
   </section>
 
 
   <section class="section" id="BibTeX">
     <div class="container is-max-desktop content">
-      <h2 class="title">BibTeX</h2>
-      <pre><code>@article{liudiff,
-        title={Diff-Control: A Stateful Diffusion-based Policy for Imitation Learning},
-        author={Liu, Xiao and Zhou, Yifan and Weigend, Fabian and Sonawani, Shubham and Ikemoto, Shuhei and Amor, Heni Ben}
-      }</code></pre>
-      <pre><code>@article{liu2024enabling,
-        title={Enabling Stateful Behaviors for Diffusion-based Policy Learning},
-        author={Liu, Xiao and Weigend, Fabian and Zhou, Yifan and Amor, Heni Ben},
-        journal={arXiv preprint arXiv:2404.12539},
-        year={2024}
-      }</code></pre>
+      <h2 class="title">Model Details</h2>
+      <p>
+        AutoMA embeds modular designs through an attention mechanism, which operates using three components: queries
+        (Q), keys (K), and values (V). The query (Q) identifies the most relevant keys (K), producing scores that
+        reflect their alignment. These scores are normalized and used to weight the corresponding values (V), thereby
+        aggregating the most relevant information.
+      </p>
     </div>
 
+  </section>
 
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">Prompt Templete</h2>
+      <p>
+        the task for the robot
+      </p>
+      <pre><code>
+        **Task:**
+        You are a robot reflection model and your ask is to look at an image and
+        look at two state description of the scene and return the more accurate state.
+        For example, your command is given as 'stack the 1st block
+        on the 2nd block and stack the 3rd block on the 1st block.'.
+        Your input is an observation image of the scene, the two state description of the scene,
+        the output should be an state which describes more correctly of the scene.
+    </code></pre>
+      <p>
+        the example
+      </p>
+      <pre><code>
+        **Example Responses (you should follow the same JSON output format):**
+        Example 1.
+        "image_1"
+        {
+        "task": "stack the red block on the green block and stack the blue block on the red block.",
+        "input_state_1": ["red block on the green block", "green block on the table", "blue block on the table", "brown block on the table"],
+        "input_state_2": ["red block on the table", "green block on the table", "blue block on the table", "brown block on the table"],
+        "output_state": ["red block on the table", "blue block on the table", "green block on the table", "brown block on the table"],
+        "reason": "In the above image, all for blocks are not yet stacked and they are all on the table, so the input_state_2 is more accurate."
+        }
+    </code></pre>
+    </div>
 
   </section>
 
