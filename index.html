@@ -3,8 +3,9 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="description" content="Diff-Control: A Stateful Diffusion-based Policy for Imitation Learning">
-  <meta name="keywords" content="Diffusion Model, Imitation Learning, Stateful Policy">
+  <meta name="description"
+    content="AutoMA: Automated Modular Attention enables Context-Rich Imitation Learning using Foundation Models">
+  <meta name="keywords" content="Imitation Learning, Modular Policy">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Diff-Control: A Stateful Diffusion-based Policy for Imitation Learning</title>
 
@@ -62,18 +63,9 @@
             More Research
           </a>
           <div class="navbar-dropdown">
-            <!-- <a class="navbar-item" href="https://github.com/ir-lab/DEnKF">
-              Differentiable Ensemble Kalman Filter (DEnKF)
+            <a class="navbar-item" href="https://languageforrobots.com/">
+              Modularity through Attention (ModAttn)
             </a>
-            <a class="navbar-item" href="https://github.com/ir-lab/soft_robot_DEnKF">
-              DEnKF + soft robot and spatio-temporal embedding
-            </a> -->
-            <!-- <a class="navbar-item" href="https://latentfusion.github.io">
-              LatentFusion
-            </a>
-            <a class="navbar-item" href="https://photoshape.github.io">
-              PhotoShape
-            </a> -->
           </div>
         </div>
       </div>
@@ -87,21 +79,15 @@
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column has-text-centered">
-            <h1 class="title is-1 publication-title">Diff-Control: A Stateful Diffusion-based Policy for Imitation
-              Learning</h1>
+            <h1 class="title is-1 publication-title">AutoMA: Automated Modular Attention enables Context-Rich Imitation
+              Learning using Foundation Models</h1>
             <div class="is-size-5 publication-authors">
-              <span class="author-block">
-                <a href="https://www.xiao-liu.me/">Xiao Liu</a><sup>1</sup>,</span>
               <span class="author-block">
                 <a href="http://yifanzhou.com/">Yifan Zhou</a><sup>1</sup>,</span>
               <span class="author-block">
-                <a href="https://faweigend.com/">Fabian Weigend </a><sup>1</sup>,
-              </span>
+                <a href="https://www.xiao-liu.me/">Xiao Liu</a><sup>1</sup>,</span>
               <span class="author-block">
-                <a href="https://www.sdsonawani.com/">Shubham Sonawani</a> <sup>1</sup>,
-              </span>
-              <span class="author-block">
-                <a href="https://www.brain.kyutech.ac.jp/~ikemoto/people.html">Shuhei Ikemoto</a><sup>2</sup>,
+                <a href="https://quanvuong.github.io/">Quan Vuong</a><sup>2</sup>,
               </span>
               <span class="author-block">
                 <a href="http://henibenamor.weebly.com/">Heni Ben Amor</a><sup>1</sup>,
@@ -121,8 +107,8 @@
               <span class="author-block"><sup>1</sup><a
                   href="https://interactive-robotics.engineering.asu.edu/">Interactive Robotics Lab, Arizona State
                   University</span></a>
-              <span class="author-block"><sup>2</sup><a href="https://www.brain.kyutech.ac.jp/~ikemoto/"> Kyushu
-                  Institute of Technology</span></a>
+              <span class="author-block"><sup>2</sup><a href="https://physicalintelligence.company/">Physical
+                  Intelligence</span></a>
             </div>
 
             <div class="column has-text-centered">
@@ -185,15 +171,16 @@
     <div class="container is-max-desktop">
       <div class="hero-body">
 
-        <!-- <img src="./static/videos/teaser.png" class="interpolation-image" alt="Interpolate start reference image." /> -->
+        <img src="./static/videos/teaser-1.png" class="interpolation-image" alt="Interpolate start reference image." />
 
-        <video id="teaser" autoplay controls muted loop playsinline height="100%">
+        <!-- <video id="teaser" autoplay controls muted loop playsinline height="100%">
           <source src="./static/videos/task_sequence.mp4" type="video/mp4">
-        </video>
+        </video> -->
         <h2 class="subtitle has-text-centered">
 
-          <strong>Diff-Control Policy</strong> incorporates ControlNet, functioning as a transition model that captures
-          temporal transitions within the action space to ensure action consistency.
+          Given the task "<i>stack the blue block on the red block</i> ", LLMs design hierarchical modules h by
+          decomposing the task into several sub-task modules, while VLMs supervises the module. The policy network,
+          enriched with this context, can then effectively execute the task.
 
         </h2>
       </div>
@@ -259,18 +246,26 @@
           <h2 class="title is-3">Abstract</h2>
           <div class="content has-text-justified">
             <p>
-              While imitation learning provides a simple and effective framework for policy learning, acquiring
-              consistent action during robot execution remains a challenging task. Existing approaches primarily focus
-              on either modifying the action representation at data curation stage or altering the model itself, both of
-              which do not fully address the scalability of consistent action generation. To overcome this limitation,
-              we introduce the <strong>Diff-Control</strong> policy, which utilizes a diffusion-based model to learn
-              action representation from a state-space modeling viewpoint. We demonstrate that diffusion-based policies
-              can acquire statefulness through a Bayesian formulation facilitated by ControlNet, leading to improved
-              robustness and success rates. Our experimental results demonstrate the significance of incorporating
-              action statefulness in policy learning, where Diff-Control shows improved performance across various
-              tasks. Specifically, Diff-Control achieves an average success rate of 72% and 84% on stateful and
-              dynamic tasks, respectively. Notably, Diff-Control also shows consistent performance in the presence of
-              perturbations, outperforming other state-of-the-art methods that falter under similar conditions.
+              Although imitation learning offers an appealing framework for policy learning, scaling it is challenging
+              due to the lack of high-quality expert data. Previous works have addressed this by modifying model
+              design
+              and increasing state diversity to improve data quality, but these approaches often overlook the rich
+              contextual information inherent in the data itself. In this paper, we propose an automated learning
+              framework that leverages large language models (LLMs) and vision-language models (VLMs) to provide
+              context-rich supervision for Modular Attention based imitation learning policies, denoted as
+              <strong>AutoMA</strong>.
+              Specifically, LLMs are used for hierarchical modular design, and VLMs provide supervision signals for
+              the
+              different modules. <strong>AutoMA</strong> thus leverages the capabilities of foundational models to
+              inform the policy
+              with
+              rich context from the data. Experimentally, we demonstrate that AutoMA is scalable across a broad
+              spectrum
+              of tasks and significantly outperforms baseline models in six simulated and real-world manipulation
+              tasks,
+              achieving success rate improvements of up to 56%. Furthermore, we illustrate how AutoMA facilitates
+              re-using the modules when transferring the policy to different robots with only 20% of the original data
+              scale, significantly improving data efficiency.
             </p>
             <!-- <p>
               We show that <span class="dnerf">Nerfies</span> can turn casually captured selfie
@@ -310,101 +305,203 @@
   <section class="section">
     <div class="container is-max-desktop">
 
-      <!--/ method. -->
+      <!--/ video for 3 start-->
       <div class="columns is-centered has-text-centered">
-        <!-- Regid Body motion -->
-        <div class="column">
-          <div class="content">
-            <h2 class="title is-3">Language-Conditioned</h2>
-            <p>
-              Among all the baseline methods, Diff-Control achieves the highest success rate with 92%, which is 5%,
-              64%, and 32% higher than diffusion policy, ModAttn, and Image-BC, respectively.
-            </p>
-            <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
-              <source src="./static/videos/tomato_fuse.mp4" type="video/mp4">
-            </video>
-          </div>
-        </div>
-        <!--/ Regid Body motion -->
 
-        <!-- Soft robot motion -->
         <div class="column">
           <div class="content">
-            <h2 class="title is-3">High-Precision</h2>
+            <h2 class="title is-5">Sort Object</h2>
             <p>
-              Diff-Control policy is able to achieve this high-precision task with 80% success rate over 25 trials,
-              Diff-Control policy demonstrated superior performance and does not show the tendency to overfit on idle
-              actions.
+              "Put the coke can in the bin"
             </p>
             <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
-              <source src="./static/videos/Open_lid.mp4" type="video/mp4">
+              <source src="./static/videos/video_00.mp4" type="video/mp4">
             </video>
           </div>
         </div>
-        <!--/ soft robot motion -->
+
+        <div class="column">
+          <div class="content">
+            <h2 class="title is-5">Sort Object</h2>
+            <p>
+              "Sort the coke can"
+            </p>
+            <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/video_01.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="content">
+            <h2 class="title is-5">Sort Object</h2>
+            <p>
+              "Put the coke into the bin"
+            </p>
+            <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/video_02.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+
       </div>
-      <!--/ Matting. -->
+      <!--/ video for 3 end-->
 
 
-      <!--/ method. -->
+      <!--/ video for 3 start-->
       <div class="columns is-centered has-text-centered">
-        <!-- Regid Body motion -->
-        <div class="column">
-          <div class="content">
-            <h2 class="title is-3">Dynamic Environment</h2>
-            <p>
-              Diff-Control policy achieves a commendable success rate of 84% while performing in this dynamic task.
-              It demonstrates a tendency to scoop the duck out in a single
-              attempt, reaching a low enough position for accurate scooping.
-            </p>
-            <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
-              <source src="./static/videos/duck.mp4" type="video/mp4">
-            </video>
-          </div>
-        </div>
-        <!--/ Regid Body motion -->
 
-        <!-- Soft robot motion -->
         <div class="column">
           <div class="content">
-            <h2 class="title is-3">Periodic Motion</h2>
+            <h2 class="title is-5">Sort Object</h2>
             <p>
-              Diff-Control achieves the highest success rate of 72%, it is able to predict the direction of actions
-              correctly (upward or downward) and knows when to halt the actions. The stateful behavior is beneficial for
-              robot learning periodic motions.
+              Testing trial 01 with distractors
             </p>
             <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
-              <source src="./static/videos/drum.mp4" type="video/mp4">
+              <source src="./static/videos/video_10.mp4" type="video/mp4">
             </video>
           </div>
         </div>
-        <!--/ soft robot motion -->
+
+        <div class="column">
+          <div class="content">
+            <h2 class="title is-5">Sort Object</h2>
+            <p>
+              Testing trial 02 with distractors
+            </p>
+            <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/video_11.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="content">
+            <h2 class="title is-5">Sort Object</h2>
+            <p>
+              Testing trial 03 with distractors
+            </p>
+            <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/video_12.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+
       </div>
-      <!--/ Matting. -->
+      <!--/ video for 3 end-->
+
+      <!--/ video for 3 start-->
+      <div class="columns is-centered has-text-centered">
+
+        <div class="column">
+          <div class="content">
+            <h2 class="title is-5">Stack Blocks</h2>
+            <p>
+              Testing trial 01 with no distractor
+            </p>
+            <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/video_20.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="content">
+            <h2 class="title is-5">Stack Blocks</h2>
+            <p>
+              Testing trial 02 with no distractor
+            </p>
+            <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/video_21.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="content">
+            <h2 class="title is-5">Stack Blocks</h2>
+            <p>
+              Testing trial 03 with no distractor
+            </p>
+            <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/video_22.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+
+      </div>
+      <!--/ video for 3 end-->
+
+      <!--/ video for 3 start-->
+      <div class="columns is-centered has-text-centered">
+
+        <div class="column">
+          <div class="content">
+            <h2 class="title is-5">Stack Blocks</h2>
+            <p>
+              Testing trial 01 with distractors
+            </p>
+            <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/video_30.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="content">
+            <h2 class="title is-5">Stack Blocks</h2>
+            <p>
+              Testing trial 02 with no distractor
+            </p>
+            <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/video_31.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="content">
+            <h2 class="title is-5">Stack Blocks</h2>
+            <p>
+              Testing trial 03 with no distractor
+            </p>
+            <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/video_32.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+
+      </div>
+      <!--/ video for 3 end-->
 
 
 
       <!-- method. -->
       <div class="columns is-centered has-text-centered">
         <div class="column is-full-width">
-          <h2 class="title is-3">Diff-Control Policy</h2>
+          <h2 class="title is-3">AutoMA</h2>
 
           <!-- Interpolating. -->
           <h3 class="title is-4">Overview</h3>
           <div class="content has-text-justified">
             <p>
-              The key objective of Diff-Control is to learn how to incorporate state information into the
-              decision-making process of diffusion policies. In computer vision, ControlNet is used within stable
-              diffusion models to enable additional control inputs or extra conditions when generating images or video
-              sequences. Our method extends the basic principle of ControlNet from image generation to action
-              generation, and use it as a state-space model in which the internal state of the system affects the output
-              of the policy in conjunction with observations (camera input) and human language instructions.
+              This AutoMA framework bridges the gap between modular and end-to-end learning, enabling the reuse of
+              functional building blocks. In summary, our contributions are as follows: (1) <strong>Leveraging Rich
+                Context</strong>: Our approach leverages rich context by decomposing tasks into hierarchical modules and
+              semantically extracting the underlying context for each module; (2) <strong>Improving Data
+                Efficiency</strong>:
+              AutoMA enhances data efficiency by enabling the reuse of functional building blocks when transferring
+              tasks to different embodiments; (3) <strong>Empirical Evaluations</strong>: AutoMA demonstrates
+              significant
+              improvements, achieving up to 56% success rate improvements in complex manipulation tasks with
+              distractors compared to baselines.
             </p>
-            <img src="./static/videos/controlnet.png" class="interpolation-image"
+            <img src="./static/videos/overview_automa.png" class="interpolation-image"
               alt="Interpolate start reference image." />
             <p>
               Diff-Control operates by generating a sequence of actions while incorporating conditioning on previously
-              generated actions. In this example, the Diff-Control policy is depicted executing the "Open Lid" task. For
+              generated actions. In this example, the Diff-Control policy is depicted executing the "Open Lid" task.
+              For
               instance, in the second sub-figure,
               the blue trajectory represents previous action trajectory, denoted as
               <strong>a<sub>[W<sub>t</sub>]</sub></strong>, while
@@ -430,7 +527,8 @@
             </p>
             <center><img src="./static/videos/sine.png" width="600" height="500"></center>
             <p>
-              At a given state, Diff-Control policy can utilize prior trajectories to approximate the desired function.
+              At a given state, Diff-Control policy can utilize prior trajectories to approximate the desired
+              function.
               Diffusion policy learns both modes but fails on generating the correct trajectory cosistently,
               Image-BC/BC-Z fails to generate the correct trajectory.
             </p>
@@ -447,7 +545,8 @@
                 in the kitchen scenario. </li>
               <li><strong>Open Lid task</strong>: this task is in the kitchen scene with a high-precision requirement.
               </li>
-              <li><strong>Duck Scooping task</strong>: we explore the interaction between the policy and fluid dynamics.
+              <li><strong>Duck Scooping task</strong>: we explore the interaction between the policy and fluid
+                dynamics.
               </li>
               <li><strong>Drum Beats (3 hits) task</strong>: this task is specifically designed for robots to learn
                 periodic
@@ -465,7 +564,8 @@
             <p>
             <ul>
               <li><strong>Image-BC</strong>: This baseline adopts an image-to-action agent
-                framework, similar to BC-Z, it is built upon ResNet-18 backbone and employs FiLM for conditioning using
+                framework, similar to BC-Z, it is built upon ResNet-18 backbone and employs FiLM for conditioning
+                using
                 CLIP language features. </li>
               <li><strong>ModAttn</strong>: This method employs a transformer-style neural network and uses a modular
                 structure to address each sub-aspects of the task via neural attention, it requires a human expert
@@ -498,16 +598,19 @@
 
           <div class="content has-text-justified">
             <p>
-              To assess the performance and effectiveness of our approach, we conducted comparative evaluations against
+              To assess the performance and effectiveness of our approach, we conducted comparative evaluations
+              against
               robot learning policy baselines.
             </p>
             <p>
               <a href="https://diffusion-policy.cs.columbia.edu/">Diffusion Policy
-              </a> serves as the base policy in proposed framework, similar design decisions has been made referring to
+              </a> serves as the base policy in proposed framework, similar design decisions has been made referring
+              to
               the visual encodings, hyper-parameters, etc.
             </p>
             <p>
-              We adapt <a href="https://github.com/lllyasviel/ControlNet">ControlNet</a> sturcture, expecially the zero
+              We adapt <a href="https://github.com/lllyasviel/ControlNet">ControlNet</a> sturcture, expecially the
+              zero
               convolusion layers to create Diff-Control in robot trajectory domain.
             </p>
             <p>
