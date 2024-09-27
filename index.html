@@ -385,59 +385,58 @@
 
               <div style="height: 300px; width: 100%; overflow:auto; word-wrap: break-word">
                 <pre style="word-wrap: break-word; width: 100%"><code style="word-wrap: break-word; width: 100%">
+<strong>**Task**</strong>
+You will be presented with a short video of a robot performing a task, together with a sentence describing the task. 
+Your task is to create an understanding of the tasks, with the goal of performing imitation learning.
+The understandings will include the following:
+1) According to the video and the sentence, what information should the robot pay attention to?
+2) Regarding the selected information, how do they form up a hierarchical structure?
 
-                  <strong>**Task**</strong>
-                  You will be presented with a short video of a robot performing a task, together with a sentence describing the task. 
-                  Your task is to create an understanding of the tasks, with the goal of performing imitation learning.
-                  The understandings will include the following:
-                  1) According to the video and the sentence, what information should the robot pay attention to?
-                  2) Regarding the selected information, how do they form up a hierarchical structure?
-                  
-                  <strong>**Example**</strong>
-                  All_modalities_available: 
-                  - I1: Natural Language Instruction
-                  - I2: Single Image of Current Time
-                  - I3: Joint State of Robot
-                  - I4: End-effector location of Robot
-                  All_output_ground_truths:
-                  - G1: Action Trajectory
-                  Requirements:
-                  - No modules should have the same (input ground truth, output ground truth) pair.
-                  APIs available:
-                  - get_from_language(target)
-                  - get_from_image(target)
-                  Sentence: 
-                  - Lift up the cube.
-                  Video:
-                  - &lt;frame1&gt;&lt;frame2&gt;&lt;frame3&gt;&lt;frame4&gt;&lt;frame5&gt;
-                  
-                  Understanding:
-                  R1 = Query(key=I1); N1 = Decode(R1); # Get the task to perform, from language. Now R1 contains the task to perform.
-                  R2 = Query(key=I1); N2 = Decode(R2); # Get the object to manipulate, from language. Now R2 contains the object to manipulate.
-                  R3 = Query(key=I2); N3 = Decode(R3); # Get the location of the object, from object to manipulate and image. Now R3 contains the location of the object.
-                  R4 = Query(key=I3); N4 = Decode(R4); # Get the location of the robot, from joint state. Now R4 contains the location of the robot.
-                  R5 = Query(key=[R1, R3, R4]); N5 = Decode(R5); # Get the plan to perform the task, from task, object location, and robot location. Now R5 contains the plan to perform the task.
-                  
-                  Generating labels:
-                  - N1: get_from_language("what task to perform")
-                  - N2: get_from_language("what object to manipulate")
-                  - N3: get_from_image(N2)
-                  - N4: I4
-                  - N5: G1
-                  
-                  <strong>**Your Response**</strong>
-                  All_modalities_available: 
-                  - &lt;Modality 1&gt;&lt;Modality 2&gt;, …, &lt;Modality N&gt;
-                  All_output_ground_truths:
-                  - &lt;Output 1&gt;
-                  Requirements:
-                  - No modules should have the same (input ground truth, output ground truth) pair.
-                  Sentence: 
-                  - &lt;sentence&gt;
-                  Video:
-                  - &lt;frame1&gt;&lt;frame2&gt;&lt;frame3&gt;&lt;frame4&gt;&lt;frame5&gt;
-                  
-                  Understanding:                  
+<strong>**Example**</strong>
+All_modalities_available: 
+- I1: Natural Language Instruction
+- I2: Single Image of Current Time
+- I3: Joint State of Robot
+- I4: End-effector location of Robot
+All_output_ground_truths:
+- G1: Action Trajectory
+Requirements:
+- No modules should have the same (input ground truth, output ground truth) pair.
+APIs available:
+- get_from_language(target)
+- get_from_image(target)
+Sentence: 
+- Lift up the cube.
+Video:
+- &lt;frame1&gt;&lt;frame2&gt;&lt;frame3&gt;&lt;frame4&gt;&lt;frame5&gt;
+
+Understanding:
+R1 = Query(key=I1); N1 = Decode(R1); # Get the task to perform, from language. Now R1 contains the task to perform.
+R2 = Query(key=I1); N2 = Decode(R2); # Get the object to manipulate, from language. Now R2 contains the object to manipulate.
+R3 = Query(key=I2); N3 = Decode(R3); # Get the location of the object, from object to manipulate and image. Now R3 contains the location of the object.
+R4 = Query(key=I3); N4 = Decode(R4); # Get the location of the robot, from joint state. Now R4 contains the location of the robot.
+R5 = Query(key=[R1, R3, R4]); N5 = Decode(R5); # Get the plan to perform the task, from task, object location, and robot location. Now R5 contains the plan to perform the task.
+
+Generating labels:
+- N1: get_from_language("what task to perform")
+- N2: get_from_language("what object to manipulate")
+- N3: get_from_image(N2)
+- N4: I4
+- N5: G1
+
+<strong>**Your Response**</strong>
+All_modalities_available: 
+- &lt;Modality 1&gt;&lt;Modality 2&gt;, …, &lt;Modality N&gt;
+All_output_ground_truths:
+- &lt;Output 1&gt;
+Requirements:
+- No modules should have the same (input ground truth, output ground truth) pair.
+Sentence: 
+- &lt;sentence&gt;
+Video:
+- &lt;frame1&gt;&lt;frame2&gt;&lt;frame3&gt;&lt;frame4&gt;&lt;frame5&gt;
+
+Understanding:                  
               </code></pre></div>
 
           </div>
@@ -839,12 +838,12 @@
   <footer class="footer">
     <div class="container">
       <div class="content has-text-centered">
-        <a class="icon-link" href="./static/videos/Diff-Control.pdf">
+        <a class="icon-link" href="./static/videos/AutoMA.pdf">
           <i class="fas fa-file-pdf"></i>
         </a>
-        <a class="icon-link" href="https://github.com/liuxiao1468" class="external-link" disabled>
+        <!-- <a class="icon-link" href="https://github.com/liuxiao1468" class="external-link" disabled>
           <i class="fab fa-github"></i>
-        </a>
+        </a> -->
       </div>
       <div class="columns is-centered">
         <div class="column is-8">
