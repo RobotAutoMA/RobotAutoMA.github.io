@@ -246,26 +246,28 @@
           <h2 class="title is-3">Abstract</h2>
           <div class="content has-text-justified">
             <p>
-              Although imitation learning offers an appealing framework for policy learning, scaling it is challenging
-              due to the lack of high-quality expert data. Previous works have addressed this by modifying model
-              design
-              and increasing state diversity to improve data quality, but these approaches often overlook the rich
-              contextual information inherent in the data itself. In this paper, we propose an automated learning
-              framework that leverages large language models (LLMs) and vision-language models (VLMs) to provide
-              context-rich supervision for Modular Attention based imitation learning policies, denoted as
-              <strong>AutoMA</strong>.
-              Specifically, LLMs are used for hierarchical modular design, and VLMs provide supervision signals for
-              the
-              different modules. <strong>AutoMA</strong> thus leverages the capabilities of foundational models to
-              inform the policy
-              with
-              rich context from the data. Experimentally, we demonstrate that AutoMA is scalable across a broad
-              spectrum
-              of tasks and significantly outperforms baseline models in six simulated and real-world manipulation
-              tasks,
-              achieving success rate improvements of up to 56%. Furthermore, we illustrate how AutoMA facilitates
-              re-using the modules when transferring the policy to different robots with only 20% of the original data
-              scale, significantly improving data efficiency.
+              Although imitation learning offers an appealing
+              framework for policy learning, scaling it is challenging due
+              to the lack of high-quality expert data. Previous works have
+              addressed this by modifying model design and increasing state
+              diversity to improve data quality, but these approaches often
+              overlook the rich contextual information inherent in the data
+              itself. In this paper, we propose an automated learning framework
+               that leverages large language models (LLMs) and vision-language 
+              models (VLMs) to provide context-rich supervision
+              for Modular Attention based imitation learning policies, denoted
+              as <strong>AutoMA</strong>. Specifically, LLMs are used for hierarchical
+              modular design, and VLMs provide supervision signals for the
+              different modules. <strong>AutoMA</strong> thus leverages the capabilities of
+              foundational models to inform the policy with rich context
+              from the data. Experimentally, we demonstrate that AutoMA
+              is scalable across a broad spectrum of tasks and significantly
+              outperforms baseline models in six simulated and real-world
+              manipulation tasks, achieving success rate improvements of up
+              to 63.3%. Furthermore, we illustrate how <strong>AutoMA</strong> facilitates
+              re-using the modules when transferring the policy to different
+              robots with only 20% of the original data scale, significantly
+              improving data efficiency.
             </p>
             <!-- <p>
               We show that <span class="dnerf">Nerfies</span> can turn casually captured selfie
@@ -302,32 +304,38 @@
 
 
 
+
+
   <section class="section">
-    <div class="container is-max-desktop">
+    <div class="container is-max-desktop content">
 
 
 
 
 
       <!-- method. -->
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-full-width">
-          <h2 class="title is-3">AutoMA</h2>
+      <!-- <div class="columns is-centered has-text-centered"> -->
+        <!-- <div class="columns has-text-centered is-full-width"> -->
+        <!-- <div class="column is-full-width"> -->
+          <div>
+          <div>
+          <h2 class="title is-3"></h2>
 
           <!-- Interpolating. -->
           <h3 class="title is-4">Overview</h3>
           <div class="content has-text-justified">
             <p>
-              This AutoMA framework bridges the gap between modular and end-to-end learning, enabling the reuse of
-              functional building blocks. In summary, our contributions are as follows: (1) <strong>Leveraging Rich
-                Context</strong>: Our approach leverages rich context by decomposing tasks into hierarchical modules and
-              semantically extracting the underlying context for each module; (2) <strong>Improving Data
-                Efficiency</strong>:
-              AutoMA enhances data efficiency by enabling the reuse of functional building blocks when transferring
-              tasks to different embodiments; (3) <strong>Empirical Evaluations</strong>: AutoMA demonstrates
-              significant
-              improvements, achieving up to 56% success rate improvements in complex manipulation tasks with
-              distractors compared to baselines.
+              <strong>AutoMA</strong> focuses on training a language-conditioned robot policy. 
+              It operates in two key steps: (1)
+              <strong>Automatic Hierarchy and Module Design</strong>. In this phase,
+              we employ LLMs and VLMs for task comprehension, which
+              autonomously generates a hierarchy of modules relevant
+              to the task, along with the corresponding training labels.
+              (2) <strong>End-to-End Training of Modular Attention</strong>. Once
+              the training data and module design are established, the
+              second step involves training a transformer model end-to-end,
+              embedding the modular hierarchy to guide the learning
+              process effectively.
             </p>
             <img src="./static/videos/overview_automa.png" class="interpolation-image"
               alt="Interpolate start reference image." />
@@ -344,25 +352,158 @@
 
 
           <!-- Attention Gain -->
-          <h3 class="title is-4">Modularity</h3>
+          <h3 class="title is-4">Method Step 1: Automatic Synthesis of Hierarchy and Modules</h3>
           <div class="content has-text-justified">
             <p>
               For instance, in a stacking task, the high-level task is decomposed into several
               sub-tasks: (1) understanding the required action type, (2) identifying which object to manipulate, (3)
               locating the object in the image, and (4) generating the end-effector controls. As shown in the figure,
-              these sub-tasks form a hierarchical structure
+              these sub-tasks form a hierarchical structure where <i>Lang</i>, <i>Image</i>, and <i>EE</i> are considered as input modules, <i>Task</i>,
+              <i>Object</i>, <i>ObjLoc</i>, and <i>CTRL</i> are sub-task modules.
             </p>
             <center><img src="./static/videos/h.png" width="400" height="300"></center>
             <p>
-              where <i>Lang</i>, <i>Image</i>, and <i>EE</i> are considered as input modules, <i>Task</i>,
-              <i>Object</i>, <i>ObjLoc</i>, and <i>CTRL</i> are sub-task modules.
+              
             </p>
+              
+
+
+
+
+
+
+
+
+
+
+
+
+
+              <p>
+                Large Language Models (LLMs) are employed to automate the generation of task hierarchies. The goal is to analyze an expert demonstration and construct an appropriate hierarchy. As illustrated in the code below, the prompt template used in our approach consists of three main components: (1) A preamble detailing the task of hierarchy generation; (2) An in-context learning example that demonstrates the input-output format; and (3) The actual input derived from the expert demonstrations.
+              </p>
+
+              <div style="height: 300px; width: 100%; overflow:auto; word-wrap: break-word">
+                <pre style="word-wrap: break-word; width: 100%"><code style="word-wrap: break-word; width: 100%">
+
+                  <strong>**Task**</strong>
+                  You will be presented with a short video of a robot performing a task, together with a sentence describing the task. 
+                  Your task is to create an understanding of the tasks, with the goal of performing imitation learning.
+                  The understandings will include the following:
+                  1) According to the video and the sentence, what information should the robot pay attention to?
+                  2) Regarding the selected information, how do they form up a hierarchical structure?
+                  
+                  <strong>**Example**</strong>
+                  All_modalities_available: 
+                  - I1: Natural Language Instruction
+                  - I2: Single Image of Current Time
+                  - I3: Joint State of Robot
+                  - I4: End-effector location of Robot
+                  All_output_ground_truths:
+                  - G1: Action Trajectory
+                  Requirements:
+                  - No modules should have the same (input ground truth, output ground truth) pair.
+                  APIs available:
+                  - get_from_language(target)
+                  - get_from_image(target)
+                  Sentence: 
+                  - Lift up the cube.
+                  Video:
+                  - &lt;frame1&gt;&lt;frame2&gt;&lt;frame3&gt;&lt;frame4&gt;&lt;frame5&gt;
+                  
+                  Understanding:
+                  R1 = Query(key=I1); N1 = Decode(R1); # Get the task to perform, from language. Now R1 contains the task to perform.
+                  R2 = Query(key=I1); N2 = Decode(R2); # Get the object to manipulate, from language. Now R2 contains the object to manipulate.
+                  R3 = Query(key=I2); N3 = Decode(R3); # Get the location of the object, from object to manipulate and image. Now R3 contains the location of the object.
+                  R4 = Query(key=I3); N4 = Decode(R4); # Get the location of the robot, from joint state. Now R4 contains the location of the robot.
+                  R5 = Query(key=[R1, R3, R4]); N5 = Decode(R5); # Get the plan to perform the task, from task, object location, and robot location. Now R5 contains the plan to perform the task.
+                  
+                  Generating labels:
+                  - N1: get_from_language("what task to perform")
+                  - N2: get_from_language("what object to manipulate")
+                  - N3: get_from_image(N2)
+                  - N4: I4
+                  - N5: G1
+                  
+                  <strong>**Your Response**</strong>
+                  All_modalities_available: 
+                  - &lt;Modality 1&gt;&lt;Modality 2&gt;, …, &lt;Modality N&gt;
+                  All_output_ground_truths:
+                  - &lt;Output 1&gt;
+                  Requirements:
+                  - No modules should have the same (input ground truth, output ground truth) pair.
+                  Sentence: 
+                  - &lt;sentence&gt;
+                  Video:
+                  - &lt;frame1&gt;&lt;frame2&gt;&lt;frame3&gt;&lt;frame4&gt;&lt;frame5&gt;
+                  
+                  Understanding:                  
+              </code></pre></div>
+
           </div>
           <!--/ Attention Gain -->
 
 
+
+          <h3 class="title is-4">Method Step 2: End-to-End Training of Modular Attention</h3>
+          <div class="content has-text-justified">
+            <p>
+              The proposed modules address specific sub-tasks, such as detecting the robot's 
+              end-effector or calculating the distance between the robot and a target object. 
+              To achieve this, we leverage modern attention mechanisms to manage information 
+              flow within attention layers, ensuring the network focuses 
+              on critical inputs.
+            </p>
+            <p>
+              Specifically, we implement a supervised attention mechanism that allows for customized 
+              information routing (defined by the automatically generatedhierarchy), 
+              facilitating the creation of modular structures within an end-to-end 
+              neural network. The core concept behind this mechanism is that the hierarchy reveals 
+              knowledge about optimal token pairings. In other words, if the hierarchy points out key 
+              tokens that are essential for the queries, their similarity scores can be maximized to 
+              improve the network's focus and accuracy.
+            </p>
+            <center><img src="./static/videos/Layer_example.png" width="200px"></center>
+            <p>
+              The figure illustrates the attention mechanism which facilitates the module <i>ObjLoc</i>. 
+              Queries (Q) are used to identify the most relevant keys (K), 
+              producing scores (the gray and yellow matrix) that reflect their alignment.
+              The module <i>ObjLoc</i> is designed to take in the object information, and locate the object in the image.
+              As shown in the figure, there are 2 object in the query. 
+              For each object query, the most relevant image patch (light blue) is identified, 
+              and the corresponding value, which is considered to contain the image  is used as the output.
+              In order to do so, the corresponding score in the attention map should be maximized during optimization.
+              This process is called <strong><i>supervised attention</i></strong>. 
+              In this way, we define our first training objective, the Task Hierarchy Loss:
+            </p>
+            <center><img src="./static/videos/task_hierarchy_loss.png" width="400px"></center>
+            <p>
+              The task hierarchy loss <i>L<sub>h</sub></i> optimizes towards 
+              fetching the key <i><strong>k</strong><sub>n</sub></i>
+               for the 
+              given module’s query <i><strong>q</strong><sub>n</sub></i>. Therefore, it
+              can guide the attention of the sub-modules to enforce the
+              controlled data flow.
+            </p>
+            <p>
+              Additionally, we also need to supervise the actual outputs of each module. To do so, we 
+              create MLPs for each module, which serve as prediction heads. The attention output token
+              on of the n-th module is passed through MLP<sub>n</sub>, which is
+              supervised through the sub-task label <i>l</i><sub>n</sub>. 
+              We define the second training objective, the Sub-Task Loss as following:
+            </p>
+            <center><img src="./static/videos/sub_task_loss.png" width="400px"></center>
+            <p>The overall training objective is <i>L<sub>h</sub></i> + <i>L<sub>sub</sub></i>. 
+              The result of this training process
+              is a robot policy that generates actions, which is instantiated
+              by a transformer network and is embedded by modules that
+              correspond for the sub-tasks.</p>
+          </div>
+
+
+
           <!-- result -->
-          <h3 class="title is-4">Tasks</h3>
+          <h3 class="title is-4">Experiment Tasks</h3>
           <div class="content has-text-justified">
             <p>
               we evaluate the effectiveness of AutoMA across multiple manipulation tasks, each with distinct setups:
@@ -613,7 +754,7 @@
     </div>
   </section>
 
-
+<!-- 
   <section class="section" id="BibTeX">
     <div class="container is-max-desktop content">
       <h2 class="title">Model Details</h2>
@@ -625,42 +766,74 @@
       </p>
     </div>
 
-  </section>
+  </section> -->
 
-
+<!-- 
   <section class="section" id="BibTeX">
     <div class="container is-max-desktop content">
-      <h2 class="title">Prompt Templete</h2>
+      <h2 class="title">Automated Task Hierarchy Generation</h2>
       <p>
-        the task for the robot
+        Large Language Models (LLMs) are employed to automate the generation of task hierarchies. The goal is to analyze an expert demonstration and construct an appropriate hierarchy. As illustrated in the code below, the prompt template used in our approach consists of three main components: (1) A preamble detailing the task of hierarchy generation; (2) An in-context learning example that demonstrates the input-output format; and (3) The actual input derived from the expert demonstrations.
       </p>
-      <pre><code>
-        **Task:**
-        You are a robot reflection model and your ask is to look at an image and
-        look at two state description of the scene and return the more accurate state.
-        For example, your command is given as 'stack the 1st block
-        on the 2nd block and stack the 3rd block on the 1st block.'.
-        Your input is an observation image of the scene, the two state description of the scene,
-        the output should be an state which describes more correctly of the scene.
-    </code></pre>
-      <p>
-        the example
-      </p>
-      <pre><code>
-        **Example Responses (you should follow the same JSON output format):**
-        Example 1.
-        "image_1"
-        {
-        "task": "stack the red block on the green block and stack the blue block on the red block.",
-        "input_state_1": ["red block on the green block", "green block on the table", "blue block on the table", "brown block on the table"],
-        "input_state_2": ["red block on the table", "green block on the table", "blue block on the table", "brown block on the table"],
-        "output_state": ["red block on the table", "blue block on the table", "green block on the table", "brown block on the table"],
-        "reason": "In the above image, all for blocks are not yet stacked and they are all on the table, so the input_state_2 is more accurate."
-        }
-    </code></pre>
+      <div style="height: 300px; overflow:auto; word-wrap: break-word">
+      <pre style="word-wrap: break-word"><code>
+        <strong>**Task**</strong>
+        You will be presented with a short video of a robot performing a task, together with a sentence describing the task. 
+        Your task is to create an understanding of the tasks, with the goal of performing imitation learning.
+        The understandings will include the following:
+        1) According to the video and the sentence, what information should the robot pay attention to?
+        2) Regarding the selected information, how do they form up a hierarchical structure?
+        
+        <strong>**Example**</strong>
+        All_modalities_available: 
+        - I1: Natural Language Instruction
+        - I2: Single Image of Current Time
+        - I3: Joint State of Robot
+        - I4: End-effector location of Robot
+        All_output_ground_truths:
+        - G1: Action Trajectory
+        Requirements:
+        - No modules should have the same (input ground truth, output ground truth) pair.
+        APIs available:
+        - get_from_language(target)
+        - get_from_image(target)
+        Sentence: 
+        - Lift up the cube.
+        Video:
+        - &lt;frame1&gt;&lt;frame2&gt;&lt;frame3&gt;&lt;frame4&gt;&lt;frame5&gt;
+        
+        Understanding:
+        R1 = Query(key=I1); N1 = Decode(R1); # Get the task to perform, from language. Now R1 contains the task to perform.
+        R2 = Query(key=I1); N2 = Decode(R2); # Get the object to manipulate, from language. Now R2 contains the object to manipulate.
+        R3 = Query(key=I2); N3 = Decode(R3); # Get the location of the object, from object to manipulate and image. Now R3 contains the location of the object.
+        R4 = Query(key=I3); N4 = Decode(R4); # Get the location of the robot, from joint state. Now R4 contains the location of the robot.
+        R5 = Query(key=[R1, R3, R4]); N5 = Decode(R5); # Get the plan to perform the task, from task, object location, and robot location. Now R5 contains the plan to perform the task.
+        
+        Generating labels:
+        - N1: get_from_language("what task to perform")
+        - N2: get_from_language("what object to manipulate")
+        - N3: get_from_image(N2)
+        - N4: I4
+        - N5: G1
+        
+        <strong>**Your Response**</strong>
+        All_modalities_available: 
+        - &lt;Modality 1&gt;&lt;Modality 2&gt;, …, &lt;Modality N&gt;
+        All_output_ground_truths:
+        - &lt;Output 1&gt;
+        Requirements:
+        - No modules should have the same (input ground truth, output ground truth) pair.
+        Sentence: 
+        - &lt;sentence&gt;
+        Video:
+        - &lt;frame1&gt;&lt;frame2&gt;&lt;frame3&gt;&lt;frame4&gt;&lt;frame5&gt;
+        
+        Understanding:
+        
+    </code></pre></div>
     </div>
 
-  </section>
+  </section> -->
 
 
   <footer class="footer">
